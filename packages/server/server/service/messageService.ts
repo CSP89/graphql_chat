@@ -1,13 +1,13 @@
 import uuid from "uuid";
+import { PubSub } from "apollo-server-express";
 
 import { Message } from "../graphql/types";
-import UserService from "./userService";
 
 class MessageService {
   private static instace: MessageService;
 
-  private userService = new UserService();
   private messages: { [id: string]: Message } = {};
+  private pubSub = new PubSub();
 
   constructor() {
     if (MessageService.instace !== undefined) {
@@ -20,25 +20,21 @@ class MessageService {
     const id = uuid();
     const message = { id, text, userId };
     this.messages[id] = message;
-    this.userService.addMessageToUser(userId, message);
+    this.pubSub.publish("messageAdded", { message });
     return message;
   };
 
+  messageAdded = () => this.pubSub.asyncIterator(["messageAdded"]);
+
   updateMessage = (message: Message) => {
-    const m = this.messages[message.id];
-    Object.keys({ ...message, m }).forEach(key => {
-      m[key] = message[key];
-    });
+    this.pubSub.publish("messageUpdated", { message });
+    return (this.messages[message.id] = message);
   };
 
   removeMessage = (messageId: string) => {
-    const message = this.messages[messageId];
-    return (
-      message.userId &&
-      this.userService.removeMessageFromUserById(message.userId, messageId) &&
-      delete this.messages[messageId]
-    );
+    this.pubSub.publish("messageRemoved", { id: messageId });
+    return delete this.messages[messageId];
   };
 }
 
-export default UserService;
+export default MessageService;

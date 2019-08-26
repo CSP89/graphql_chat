@@ -1,11 +1,13 @@
 import uuid from "uuid";
+import { PubSub } from "apollo-server-express";
 
-import { User, Message } from "../graphql/types";
+import { User } from "../graphql/types";
 
 class UserService {
   private static instace: UserService;
 
   private users: { [id: string]: User | undefined } = {};
+  private pubSub = new PubSub();
 
   constructor() {
     if (UserService.instace !== undefined) {
@@ -15,24 +17,16 @@ class UserService {
 
   addUser = (name: string) => {
     const id = uuid();
-    this.users[id] = {
+    const user = {
       id,
       name
     };
+    this.users[id] = user;
+    this.pubSub.publish("userAdded", { userAdded: user });
     return this.users[id];
   };
 
-  addMessageToUser = (userId: string, message: Message) => {
-    message.userId = userId;
-    return (
-      this.users[userId] &&
-      message.id &&
-      (this.users[userId].messages = {
-        ...this.users[userId].messages,
-        [message.id]: message
-      })
-    );
-  };
+  userAdded = () => this.pubSub.asyncIterator(["userAdded"]);
 
   getUsers = () => {
     return this.users;
@@ -43,16 +37,8 @@ class UserService {
   };
 
   removeUserById = (id: string) => {
+    this.pubSub.publish("userRemoved", { id });
     return delete this.users[id];
-  };
-
-  removeMessageFromUserById = (userId: string, messageId: string) => {
-    return (
-      this.users[userId] &&
-      this.users[userId].messages &&
-      this.users[userId].messages[messageId] &&
-      delete this.users[userId].messages[messageId]
-    );
   };
 }
 

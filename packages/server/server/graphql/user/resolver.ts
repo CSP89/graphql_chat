@@ -5,15 +5,14 @@ const userService = new UserService();
 
 const resolver: IResolvers = {
   Query: {
-    users: () => {
-      return Object.values(userService.getUsers());
-    }
+    users: () => Object.values(userService.getUsers())
   },
   Mutation: {
-    addUser: (root, { name }) => {
-      const user = userService.addUser(name);
-      console.log(user);
-      return user;
+    addUser: (root, { name }) => userService.addUser(name)
+  },
+  Subscription: {
+    userAdded: {
+      subscribe: userService.userAdded
     }
   }
 };

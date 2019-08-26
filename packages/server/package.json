@@ -4,23 +4,22 @@
   "description": "server",
   "main": "index.js",
   "scripts": {
-    "start": "node dist/index.js",
+    "run": "node dist/index.js",
     "compile": "ts-node build.ts && tsc",
-    "dev": "nodemon server/index.ts | pino-pretty",
+    "start": "nodemon server/index.ts | pino-pretty",
     "dev:debug": "nodemon --exec 'node -r ts-node/register --inspect-brk' server/index.ts | pino-pretty",
     "test": "mocha test/**/*.ts --exit",
     "test:debug": "mocha --inspect-brk test/**/*.ts --exit"
   },
   "dependencies": {
+    "apollo-server-express": "^2.9.0",
     "bluebird": "^3.5.5",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.4",
     "dotenv": "^8.0.0",
     "express": "^4.17.1",
-    "pino": "^5.13.1",
-    
-      "swagger-express-middleware": "^2.0.1"
-      
+    "graphql-subscriptions": "^1.1.0",
+    "pino": "^5.13.1"
   },
   "devDependencies": {
     "@types/bluebird": "^3.5.27",
@@ -29,6 +28,7 @@
     "@types/mocha": "^5.2.7",
     "@types/pino": "^5.8.8",
     "chai": "^4.2.0",
+    "graphql": "^14.5.3",
     "mocha": "^6.2.0",
     "nodemon": "^1.19.1",
     "pino-pretty": "^3.2.0",

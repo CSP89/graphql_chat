@@ -1,0 +1,14 @@
+{
+  "name": "root",
+  "private": true,
+  "scripts": {
+    "test": "lerna run test",
+    "start": "lerna run start"
+  },
+  "devDependencies": {
+    "lerna": "^3.16.4"
+  },
+  "dependencies": {
+    "nodemon": "^1.19.1"
+  }
+}

@@ -19,6 +19,7 @@ class UserService {
       id,
       name
     };
+    return this.users[id];
   };
 
   addMessageToUser = (userId: string, message: Message) => {

@@ -1,11 +1,20 @@
 import { IResolvers } from "apollo-server-express";
-import { User } from "../types";
+import UserService from "../../service/userService";
 
-const users: User[] = [];
+const userService = new UserService();
 
 const resolver: IResolvers = {
   Query: {
-    users: () => users
+    users: () => {
+      return Object.values(userService.getUsers());
+    }
+  },
+  Mutation: {
+    addUser: (root, { name }) => {
+      const user = userService.addUser(name);
+      console.log(user);
+      return user;
+    }
   }
 };
 

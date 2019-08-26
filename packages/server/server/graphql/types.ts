@@ -1,9 +1,11 @@
 export interface User {
-  id: string;
+  id?: string;
   name: string;
+  messages?: { [id: string]: Message | undefined };
 }
 
 export interface Message {
-  id: string;
-  name: string;
+  id?: string;
+  text: string;
+  userId?: string;
 }

@@ -1,10 +1,12 @@
-import { ApolloServer } from "apollo-server-express";
-import fs from "fs";
+import { ApolloServer, mergeSchemas } from "apollo-server-express";
 
-import messagesResolver from "./messages/resolver";
+import messageResolver, { schema as messageSchema } from "./message";
+import userResolver, { schema as userSchema } from "./user";
 
 export default new ApolloServer({
-  typeDefs: fs.readFileSync(__dirname + "/schema.gql").toString(),
-  resolvers: [messagesResolver],
+  schema: mergeSchemas({
+    schemas: [messageSchema, userSchema],
+    resolvers: [messageResolver, userResolver]
+  }),
   playground: true
 });

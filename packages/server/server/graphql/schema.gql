@@ -1,8 +1,0 @@
-type Query {
-  getMessages: [Message]
-}
-
-type Message {
-  id: Int
-  text: String!
-}

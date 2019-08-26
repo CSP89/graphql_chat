@@ -1,5 +1,3 @@
-import fs from "fs";
-
 import express, { Application } from "express";
 import path from "path";
 import bodyParser from "body-parser";

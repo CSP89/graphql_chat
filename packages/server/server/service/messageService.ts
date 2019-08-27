@@ -20,10 +20,11 @@ class MessageService {
   getMessages = () => this.messages;
 
   addMessage = (userId: string, text: string) => {
+    console.log(userId, text);
     const id = uuid();
-    const message = { id, text, userId };
+    const message = { id, text, userId, date: new Date() };
     this.messages[id] = message;
-    console.log(this.messages);
+    console.log("addMessage");
     this.pubSub.publish("messageAdded", { message });
     return message;
   };

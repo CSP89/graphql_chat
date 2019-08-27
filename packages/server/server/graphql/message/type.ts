@@ -4,5 +4,6 @@ export default gql`
     id: String
     text: String!
     userId: String!
+    date: Date
   }
 `;

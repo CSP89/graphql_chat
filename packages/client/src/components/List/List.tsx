@@ -14,7 +14,11 @@ import {
   Theme
 } from "@material-ui/core/styles";
 
-type ListProps = WithStyles;
+interface ListOwnProps {
+  className?: string;
+}
+
+type ListProps = ListOwnProps & WithStyles;
 
 const styles: StyleRulesCallback<Theme, {}> = () => ({
   secondaryFont: {
@@ -24,7 +28,7 @@ const styles: StyleRulesCallback<Theme, {}> = () => ({
 });
 
 export const List: React.SFC<ListProps> = props => (
-  <Box>
+  <Box className={props.className}>
     <MList>
       <ListItem>
         <ListItemText

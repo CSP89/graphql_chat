@@ -9,7 +9,12 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Typography from "@material-ui/core/Typography";
 
-import { Query, QueryResult } from "react-apollo";
+import {
+  Query,
+  Subscription,
+  QueryResult,
+  OnSubscriptionDataOptions
+} from "react-apollo";
 
 import {
   withStyles,
@@ -17,6 +22,8 @@ import {
   StyleRulesCallback,
   Theme
 } from "@material-ui/core/styles";
+
+import { Message } from "../../types";
 
 interface ListOwnProps {
   className?: string;
@@ -45,59 +52,80 @@ const QUERY_MESSAGES = gql`
   }
 `;
 
-export const List: React.FC<ListProps> = props => (
-  <Box className={cx(props.className, props.classes["root"])}>
-    <MList>
-      <Query query={QUERY_MESSAGES}>
-        {({
-          data,
-          error,
-          loading
-        }: QueryResult<
-          {
-            messages: {
-              id: string;
-              text: string;
-              userId: string;
-              date: string;
-            }[];
-          },
-          Record<string, any>
-        >) => {
-          if (loading) return <></>;
-          if (error) return <></>;
-          if (data)
-            return (
-              <>
-                {data.messages.reverse().map(message => (
-                  <ListItem key={message.id}>
-                    <ListItemText
-                      primary={message.text}
-                      secondary={
-                        <span className={props.classes["secondaryFont"]}>
-                          <Typography
-                            component="span"
-                            variant="body2"
-                            color="textPrimary"
-                          >
-                            Ali Connors
-                          </Typography>
-                          {` - ${format(
-                            parseISO(message.date),
-                            "iiii, dd. MMMM yyyy | hh:mm:ss"
-                          )}`}
-                        </span>
-                      }
-                    />
-                  </ListItem>
-                ))}
-              </>
-            );
-          return null;
-        }}
-      </Query>
-    </MList>
-  </Box>
-);
+const SUBSCRIBE_MESSAGES = gql`
+  subscription {
+    messageAdded {
+      id
+      text
+      userId
+      date
+    }
+  }
+`;
+
+const Entry = (message: Message, props: ListProps) => {
+  return (
+    <ListItem key={message.id}>
+      <ListItemText
+        primary={message.text}
+        secondary={
+          <span className={props.classes["secondaryFont"]}>
+            <Typography component="span" variant="body2" color="textPrimary">
+              Ali Connors
+            </Typography>
+            {` - ${format(
+              parseISO(message.date),
+              "iiii, dd. MMMM yyyy | hh:mm:ss"
+            )}`}
+          </span>
+        }
+      />
+    </ListItem>
+  );
+};
+
+export const List: React.FC<ListProps> = props => {
+  const [subscribed, setSubscribed] = React.useState([] as Message[]);
+  return (
+    <Box className={cx(props.className, props.classes["root"])}>
+      <MList>
+        <Subscription
+          subscription={SUBSCRIBE_MESSAGES}
+          onSubscriptionData={({
+            subscriptionData
+          }: OnSubscriptionDataOptions<{ messageAdded: Message }>) => {
+            const { loading, error, data } = subscriptionData;
+            if (data) setSubscribed([data.messageAdded, ...subscribed]);
+          }}
+        />
+        {subscribed.map(message => Entry(message, props))}
+        <Query query={QUERY_MESSAGES}>
+          {({
+            data,
+            error,
+            loading
+          }: QueryResult<
+            {
+              messages: Message[];
+            },
+            Record<string, any>
+          >) => {
+            if (loading) return <></>;
+            if (error) return <></>;
+            if (data)
+              return (
+                <>
+                  {data.messages
+                    .reverse()
+                    .map(message => Entry(message, props))}
+                </>
+              );
+            return null;
+          }}
+        </Query>
+      </MList>
+    </Box>
+  );
+};
 
 export default withStyles(styles)(List);

@@ -4,3 +4,8 @@ export interface Message {
   userId: string;
   date: string;
 }
+
+export interface User {
+  id: string;
+  name: string;
+}

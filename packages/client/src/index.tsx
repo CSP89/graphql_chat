@@ -9,6 +9,8 @@ import { WebSocketLink } from "apollo-link-ws";
 import { getMainDefinition } from "apollo-utilities";
 import { InMemoryCache } from "apollo-cache-inmemory";
 
+import { HashRouter } from "react-router-dom";
+
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
@@ -46,7 +48,9 @@ const client = new ApolloClient({
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <App />
+    <HashRouter>
+      <App />
+    </HashRouter>
   </ApolloProvider>,
   document.getElementById("root")
 );

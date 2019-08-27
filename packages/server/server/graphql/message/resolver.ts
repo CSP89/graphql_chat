@@ -13,7 +13,6 @@ const resolver: IResolvers = {
   Mutation: {
     addMessage: (root, data, test) => {
       const { userId, text } = data;
-      console.log(root, data, test);
       return messageService.addMessage(userId, text);
     }
   },

@@ -14,7 +14,10 @@ import {
   Theme
 } from "@material-ui/core/styles";
 
+import { User } from "../../types";
+
 interface ChatInputOwnProps {
+  user: User;
   className?: string;
 }
 
@@ -57,7 +60,12 @@ export const ChatInput: React.FC<ChatInputProps> = props => {
           autoComplete="off"
           onSubmit={e => {
             e.preventDefault();
-            value && addMessage({ variables: { userId: "1234", text: value } });
+            value &&
+              addMessage({ variables: { userId: "1234", text: value } }).then(
+                () => {
+                  setValue("");
+                }
+              );
           }}
         >
           <TextField
@@ -74,7 +82,9 @@ export const ChatInput: React.FC<ChatInputProps> = props => {
                 <Fab
                   size="small"
                   onClick={() =>
-                    addMessage({ variables: { userId: "123", text: value } })
+                    addMessage({
+                      variables: { userId: "123", text: value }
+                    }).then(() => setValue(""))
                   }
                   disabled={!value}
                 >

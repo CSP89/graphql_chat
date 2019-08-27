@@ -1,14 +1,14 @@
 import React from "react";
 
-import List from "./components/List";
-
 import {
   withStyles,
   WithStyles,
   StyleRulesCallback,
   Theme
 } from "@material-ui/core/styles";
-import { height } from "@material-ui/system";
+
+import List from "./components/List";
+import ChatInput from "./components/ChatInput";
 
 type AppProps = WithStyles;
 
@@ -23,16 +23,14 @@ const styles: StyleRulesCallback<Theme, {}> = theme => ({
     flexGrow: 1,
     height: "100%"
   },
-  input: {
-    height: "100px"
-  }
+  input: {}
 });
 
 const App: React.FC<AppProps> = props => {
   return (
     <div className={props.classes["root"]}>
+      <ChatInput className={props.classes["input"]} />
       <List className={props.classes["list"]} />
-      <div className={props.classes["input"]}></div>
     </div>
   );
 };

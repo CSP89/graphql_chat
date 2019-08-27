@@ -7,7 +7,11 @@ const messageService = new MessageService();
 
 const resolver: IResolvers = {
   Query: {
-    messages: () => messages
+    messages: () => Object.values(messageService.getMessages())
+  },
+  Mutation: {
+    addMessage: (root, { userId, text }) =>
+      messageService.addMessage(userId, text)
   },
   Subscription: {
     messageAdded: messageService.messageAdded

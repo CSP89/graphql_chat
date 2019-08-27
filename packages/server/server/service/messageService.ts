@@ -17,10 +17,13 @@ class MessageService {
     MessageService.instace = this;
   }
 
+  getMessages = () => this.messages;
+
   addMessage = (userId: string, text: string) => {
     const id = uuid();
     const message = { id, text, userId };
     this.messages[id] = message;
+    console.log(this.messages);
     this.pubSub.publish("messageAdded", { message });
     return message;
   };

@@ -31,7 +31,7 @@ const styles: StyleRulesCallback<Theme, {}> = () => ({
   }
 });
 
-export const List: React.SFC<ListProps> = props => (
+export const List: React.FC<ListProps> = props => (
   <Box className={cx(props.className, props.classes["root"])}>
     <MList>
       <ListItem>
@@ -42,7 +42,7 @@ export const List: React.SFC<ListProps> = props => (
               <Typography component="span" variant="body2" color="textPrimary">
                 Ali Connors
               </Typography>
-              {` - ${format(new Date(), "iiii, dd. MMMM yyyy | hh:mm")}`}
+              {` - ${format(new Date(), "iiii, dd. MMMM yyyy | hh:mm:ss")}`}
             </span>
           }
         />

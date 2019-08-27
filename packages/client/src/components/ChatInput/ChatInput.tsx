@@ -57,7 +57,7 @@ export const ChatInput: React.FC<ChatInputProps> = props => {
           autoComplete="off"
           onSubmit={e => {
             e.preventDefault();
-            addMessage({ variables: { userId: "1234", text: value } });
+            value && addMessage({ variables: { userId: "1234", text: value } });
           }}
         >
           <TextField
@@ -76,6 +76,7 @@ export const ChatInput: React.FC<ChatInputProps> = props => {
                   onClick={() =>
                     addMessage({ variables: { userId: "123", text: value } })
                   }
+                  disabled={!value}
                 >
                   <Send />
                 </Fab>

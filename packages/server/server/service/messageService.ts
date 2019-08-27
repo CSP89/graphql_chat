@@ -1,7 +1,8 @@
 import uuid from "uuid";
-import { PubSub } from "apollo-server-express";
+import { PubSub, IResolverOptions } from "apollo-server-express";
 
 import { Message } from "../graphql/types";
+import { subscribe } from "graphql";
 
 class MessageService {
   private static instace: MessageService;
@@ -24,7 +25,9 @@ class MessageService {
     return message;
   };
 
-  messageAdded = () => this.pubSub.asyncIterator(["messageAdded"]);
+  messageAdded: IResolverOptions = {
+    subscribe: () => this.pubSub.asyncIterator(["messageAdded"])
+  };
 
   updateMessage = (message: Message) => {
     this.pubSub.publish("messageUpdated", { message });

@@ -1,4 +1,4 @@
-import { IResolvers } from "apollo-server-express";
+import { IResolvers, IResolverOptions } from "apollo-server-express";
 import { Message } from "../types";
 import MessageService from "../../service/messageService";
 
@@ -10,9 +10,7 @@ const resolver: IResolvers = {
     messages: () => messages
   },
   Subscription: {
-    messageAdded: {
-      subscribe: messageService.messageAdded
-    }
+    messageAdded: messageService.messageAdded
   }
 };
 

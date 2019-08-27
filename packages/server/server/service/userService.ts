@@ -1,5 +1,5 @@
 import uuid from "uuid";
-import { PubSub } from "apollo-server-express";
+import { PubSub, IResolverOptions } from "apollo-server-express";
 
 import { User } from "../graphql/types";
 
@@ -26,7 +26,9 @@ class UserService {
     return this.users[id];
   };
 
-  userAdded = () => this.pubSub.asyncIterator(["userAdded"]);
+  userAdded: IResolverOptions = {
+    subscribe: () => this.pubSub.asyncIterator(["userAdded"])
+  };
 
   getUsers = () => {
     return this.users;

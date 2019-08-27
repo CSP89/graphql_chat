@@ -11,9 +11,7 @@ const resolver: IResolvers = {
     addUser: (root, { name }) => userService.addUser(name)
   },
   Subscription: {
-    userAdded: {
-      subscribe: userService.userAdded
-    }
+    userAdded: userService.userAdded
   }
 };
 

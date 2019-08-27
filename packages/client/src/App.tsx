@@ -31,11 +31,18 @@ const styles: StyleRulesCallback<Theme, {}> = theme => ({
 
 const App: React.FC<AppProps> = props => {
   const [user, handleChangeUser] = React.useState<User>();
-  console.log("render");
 
   return (
     <div className={props.classes["root"]}>
-      <Route path="/login" component={Login} />
+      <Route
+        path="/login"
+        component={() => (
+          <>
+            {user && <Redirect to="/" />}
+            <Login onUserChange={handleChangeUser} />
+          </>
+        )}
+      />
       <Route
         exact
         path="/"

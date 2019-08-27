@@ -61,11 +61,11 @@ export const ChatInput: React.FC<ChatInputProps> = props => {
           onSubmit={e => {
             e.preventDefault();
             value &&
-              addMessage({ variables: { userId: "1234", text: value } }).then(
-                () => {
-                  setValue("");
-                }
-              );
+              addMessage({
+                variables: { userId: props.user.id, text: value }
+              }).then(() => {
+                setValue("");
+              });
           }}
         >
           <TextField
@@ -83,7 +83,7 @@ export const ChatInput: React.FC<ChatInputProps> = props => {
                   size="small"
                   onClick={() =>
                     addMessage({
-                      variables: { userId: "123", text: value }
+                      variables: { userId: props.user.id, text: value }
                     }).then(() => setValue(""))
                   }
                   disabled={!value}

@@ -52,6 +52,15 @@ const QUERY_MESSAGES = gql`
   }
 `;
 
+const QUER_USER = gql`
+  query($id: String!) {
+    user(id: $id) {
+      id
+      name
+    }
+  }
+`;
+
 const SUBSCRIBE_MESSAGES = gql`
   subscription {
     messageAdded {
@@ -70,9 +79,21 @@ const Entry = (message: Message, props: ListProps) => {
         primary={message.text}
         secondary={
           <span className={props.classes["secondaryFont"]}>
-            <Typography component="span" variant="body2" color="textPrimary">
-              Ali Connors
-            </Typography>
+            <Query query={QUER_USER} variables={{ id: message.userId }}>
+              {({ data }: QueryResult<{ user: { name: String } }>) => (
+                <>
+                  {data && data.user && (
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      color="textPrimary"
+                    >
+                      {data.user.name}
+                    </Typography>
+                  )}
+                </>
+              )}
+            </Query>
             {` - ${format(
               parseISO(message.date),
               "iiii, dd. MMMM yyyy | hh:mm:ss"
@@ -112,7 +133,7 @@ export const List: React.FC<ListProps> = props => {
           >) => {
             if (loading) return <></>;
             if (error) return <></>;
-            if (data)
+            if (data) {
               return (
                 <>
                   {data.messages
@@ -120,6 +141,7 @@ export const List: React.FC<ListProps> = props => {
                     .map(message => Entry(message, props))}
                 </>
               );
+            }
             return null;
           }}
         </Query>

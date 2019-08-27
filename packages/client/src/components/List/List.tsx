@@ -1,5 +1,6 @@
 import React from "react";
 import { format } from "date-fns";
+import cx from "classnames";
 
 import Box from "@material-ui/core/Box";
 import MList from "@material-ui/core/List";
@@ -21,6 +22,9 @@ interface ListOwnProps {
 type ListProps = ListOwnProps & WithStyles;
 
 const styles: StyleRulesCallback<Theme, {}> = () => ({
+  root: {
+    overflowY: "auto"
+  },
   secondaryFont: {
     fontFamily: "'Roboto Mono', monospace",
     fontSize: "8pt"
@@ -28,7 +32,7 @@ const styles: StyleRulesCallback<Theme, {}> = () => ({
 });
 
 export const List: React.SFC<ListProps> = props => (
-  <Box className={props.className}>
+  <Box className={cx(props.className, props.classes["root"])}>
     <MList>
       <ListItem>
         <ListItemText
